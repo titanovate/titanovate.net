@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Titanovate Tech</title>
+  <meta name="description" content="Titanovate Tech builds modern trading infrastructure, algorithmic systems, and risk-aware software. Vantage is our upcoming web-based trading platform." />
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg-2:#0b1830;
+      --panel:rgba(10, 22, 43, 0.72);
+      --panel-2:rgba(14, 30, 58, 0.92);
+      --line:rgba(255,255,255,0.08);
+      --text:#edf4ff;
+      --muted:#9fb4d4;
+      --primary:#6aa6ff;
+      --secondary:#79f0ff;
+      --accent:#a98cff;
+      --glow:0 0 50px rgba(106,166,255,.18);
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(121,240,255,.16), transparent 20%),
+        radial-gradient(circle at 85% 10%, rgba(169,140,255,.16), transparent 22%),
+        radial-gradient(circle at 50% 80%, rgba(106,166,255,.12), transparent 24%),
+        linear-gradient(180deg, #06101d 0%, #081426 45%, #06101d 100%);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.65), transparent 95%);
+      z-index:0;
+    }
+
+    .orb{
+      position:fixed;
+      width:34vw;
+      height:34vw;
+      border-radius:50%;
+      filter: blur(50px);
+      opacity:.18;
+      pointer-events:none;
+      z-index:0;
+      transform:translate3d(0,0,0);
+    }
+    .orb.one{background:#4f8cff; top:-10vw; left:-8vw;}
+    .orb.two{background:#66f0ff; top:20vh; right:-10vw;}
+    .orb.three{background:#8f72ff; bottom:-12vw; left:20vw;}
+
+    .container{position:relative; z-index:1; width:min(var(--max), calc(100% - 40px)); margin:0 auto;}
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter: blur(14px);
+      background:linear-gradient(180deg, rgba(5,10,19,.88), rgba(5,10,19,.52));
+      border-bottom:1px solid rgba(255,255,255,.05);
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      min-height:78px;
+      gap:18px;
+    }
+
+    .logo{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:700;
+      letter-spacing:.03em;
+      color:#fff;
+      text-decoration:none;
+    }
+
+    .logo-mark{
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      background:
+        linear-gradient(135deg, rgba(121,240,255,.22), rgba(106,166,255,.15)),
+        rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: var(--glow);
+      font-weight:800;
+    }
+
+    .logo span{color:var(--secondary)}
+    nav a{
+      color:var(--muted);
+      text-decoration:none;
+      margin-left:24px;
+      font-size:.96rem;
+    }
+    nav a:hover{color:#fff}
+
+    .hero{
+      padding:88px 0 42px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:42px;
+      align-items:center;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:.86rem;
+      color:#d8e7ff;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.09);
+      margin-bottom:22px;
+    }
+    .dot{
+      width:9px;height:9px;border-radius:50%;
+      background:linear-gradient(135deg, var(--secondary), var(--primary));
+      box-shadow:0 0 18px rgba(121,240,255,.8);
+    }
+
+    h1{
+      font-size:clamp(2.8rem, 5vw, 5.4rem);
+      line-height:1.02;
+      margin:0 0 18px;
+      letter-spacing:-.04em;
+      max-width:12ch;
+    }
+    .gradient{
+      background:linear-gradient(90deg, #fff 5%, #cfe3ff 35%, #86eaff 70%, #97a7ff 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .hero p{
+      font-size:1.08rem;
+      color:var(--muted);
+      line-height:1.8;
+      max-width:62ch;
+      margin:0 0 28px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:34px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:14px 20px;
+      border-radius:14px;
+      text-decoration:none;
+      font-weight:600;
+      transition:.25s ease;
+      border:1px solid transparent;
+    }
+
+    .btn-primary{
+      color:#05111f;
+      background:linear-gradient(135deg, var(--secondary), #b0f4ff);
+      box-shadow:0 12px 30px rgba(121,240,255,.14);
+    }
+    .btn-primary:hover{transform:translateY(-2px)}
+
+    .btn-secondary{
+      color:#edf4ff;
+      background:rgba(255,255,255,.04);
+      border-color:rgba(255,255,255,.08);
+    }
+    .btn-secondary:hover{
+      background:rgba(255,255,255,.07);
+      transform:translateY(-2px);
+    }
+
+    .micro-note{
+      color:#86a2c8;
+      font-size:.92rem;
+    }
+
+    .hero-visual{
+      position:relative;
+      min-height:560px;
+    }
+
+    .visual-stack{
+      position:relative;
+      height:100%;
+      perspective:1200px;
+    }
+
+    .card{
+      position:absolute;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg, rgba(14,30,58,.92), rgba(9,20,39,.78));
+      border-radius:26px;
+      box-shadow:0 24px 90px rgba(3,10,24,.55), var(--glow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .card.main{
+      inset:40px 0 0 44px;
+      transform:rotateY(-10deg) rotateX(8deg);
+    }
+
+    .card.small-top{
+      top:0;
+      right:6px;
+      width:220px;
+      height:150px;
+      transform:rotate(8deg);
+    }
+
+    .card.small-bottom{
+      bottom:12px;
+      left:0;
+      width:230px;
+      height:160px;
+      transform:rotate(-10deg);
+    }
+
+    .card-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:16px 18px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      font-size:.95rem;
+      color:#dce8ff;
+    }
+
+    .card-body{padding:18px}
+    .bars{
+      display:grid;
+      gap:12px;
+      margin-bottom:20px;
+    }
+    .bar{
+      height:12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      overflow:hidden;
+      position:relative;
+    }
+    .bar::after{
+      content:"";
+      position:absolute;
+      inset:0 auto 0 0;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--primary), var(--secondary));
+      box-shadow:0 0 24px rgba(121,240,255,.28);
+      width:var(--w);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    .chart{
+      height:220px;
+      border-radius:18px;
+      position:relative;
+      overflow:hidden;
+      background:
+        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      background-size:36px 36px, 36px 36px, auto;
+    }
+    .line{
+      position:absolute;
+      inset:0;
+    }
+    .line svg{width:100%; height:100%}
+    .tag-row{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;
+    }
+    .tag{
+      padding:8px 11px;
+      border-radius:999px;
+      font-size:.82rem;
+      color:#d8e7ff;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.07);
+    }
+
+    .mini-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      padding:16px;
+    }
+    .mini-panel{
+      border:1px solid rgba(255,255,255,.06);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+    }
+    .mini-num{
+      font-size:1.25rem;
+      font-weight:700;
+      margin-top:8px;
+    }
+
+    .section{
+      padding:58px 0;
+    }
+
+    .section-title{
+      font-size:clamp(2rem, 3vw, 3rem);
+      margin:0 0 14px;
+      letter-spacing:-.03em;
+    }
+
+    .section-copy{
+      color:var(--muted);
+      max-width:66ch;
+      line-height:1.8;
+      margin:0 0 28px;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+    }
+
+    .panel{
+      padding:24px;
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg, rgba(12,25,48,.8), rgba(10,20,40,.55));
+      box-shadow:0 16px 50px rgba(4,9,19,.28);
+    }
+
+    .icon{
+      width:48px;height:48px;border-radius:14px;
+      display:grid;place-items:center;
+      margin-bottom:16px;
+      background:linear-gradient(135deg, rgba(121,240,255,.16), rgba(169,140,255,.18));
+      border:1px solid rgba(255,255,255,.08);
+      font-size:1.2rem;
+    }
+
+    .panel h3{
+      margin:0 0 10px;
+      font-size:1.1rem;
+    }
+
+    .panel p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.75;
+      font-size:.97rem;
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap:20px;
+      align-items:stretch;
+    }
+
+    .timeline{
+      display:grid;
+      gap:14px;
+    }
+
+    .timeline-item{
+      display:grid;
+      grid-template-columns:90px 1fr;
+      gap:16px;
+      align-items:start;
+      padding:18px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.03);
+    }
+
+    .timeline-item strong{
+      color:#fff;
+      display:block;
+      margin-bottom:6px;
+    }
+
+    .timeline-item span,
+    .timeline-item p{
+      color:var(--muted);
+      margin:0;
+      line-height:1.7;
+      font-size:.95rem;
+    }
+
+    .pill{
+      display:inline-flex;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(121,240,255,.10);
+      color:#c9f9ff;
+      border:1px solid rgba(121,240,255,.16);
+      font-size:.82rem;
+      font-weight:600;
+    }
+
+    .showcase{
+      position:relative;
+      min-height:420px;
+      border-radius:28px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 70% 20%, rgba(121,240,255,.15), transparent 20%),
+        radial-gradient(circle at 25% 80%, rgba(169,140,255,.18), transparent 22%),
+        linear-gradient(180deg, #0a1730 0%, #081223 100%);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 22px 70px rgba(2,7,20,.45);
+    }
+
+    .showcase::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size:40px 40px;
+      opacity:.45;
+    }
+
+    .show-orbit, .show-window, .show-chip{
+      position:absolute;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--glow);
+    }
+
+    .show-window{
+      top:54px; left:54px; right:54px; height:140px;
+      border-radius:22px; padding:20px;
+    }
+
+    .window-top{
+      display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;
+      color:#dce8ff;
+    }
+    .window-lines{display:grid; gap:10px}
+    .window-lines div{
+      height:10px; border-radius:999px; background:rgba(255,255,255,.08);
+      position:relative; overflow:hidden;
+    }
+    .window-lines div::after{
+      content:""; position:absolute; inset:0 auto 0 0; width:var(--w);
+      background:linear-gradient(90deg, rgba(121,240,255,.8), rgba(106,166,255,.9));
+      border-radius:999px;
+    }
+
+    .show-chip{
+      width:170px; height:170px; border-radius:32px;
+      bottom:42px; left:52px; display:grid; place-items:center;
+      transform:rotate(-8deg);
+    }
+    .chip-core{
+      width:86px; height:86px; border-radius:24px;
+      background:linear-gradient(135deg, rgba(121,240,255,.22), rgba(169,140,255,.22));
+      border:1px solid rgba(255,255,255,.12);
+      display:grid; place-items:center;
+      font-weight:800; letter-spacing:.14em;
+    }
+
+    .show-orbit{
+      width:220px; height:220px; border-radius:50%;
+      right:56px; bottom:40px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(121,240,255,.18), transparent 38%),
+        rgba(255,255,255,.04);
+    }
+    .ring, .ring::before, .ring::after{
+      position:absolute; inset:20px; border-radius:50%;
+      border:1px solid rgba(255,255,255,.12);
+      content:"";
+    }
+    .ring::before{inset:34px}
+    .ring::after{inset:48px}
+    .ring{
+      animation: spin 16s linear infinite;
+    }
+
+    footer{
+      padding:34px 0 60px;
+      color:#88a1c4;
+    }
+
+    .footer-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding-top:28px;
+      border-top:1px solid rgba(255,255,255,.07);
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(24px);
+      transition:opacity .8s ease, transform .8s ease;
+    }
+
+    .reveal.visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    @keyframes spin{
+      from{transform:rotate(0deg)}
+      to{transform:rotate(360deg)}
+    }
+
+    @keyframes pulse{
+      0%,100%{filter:brightness(1)}
+      50%{filter:brightness(1.25)}
+    }
+
+    @media (max-width: 980px){
+      .hero-grid, .split, .grid-3{grid-template-columns:1fr}
+      .hero-visual{min-height:500px}
+      .card.main{inset:46px 16px 0 16px}
+      nav{display:none}
+    }
+
+    @media (max-width: 700px){
+      .container{width:min(var(--max), calc(100% - 24px))}
+      .hero{padding-top:52px}
+      .hero-visual{min-height:430px}
+      .card.small-top, .card.small-bottom{display:none}
+      .timeline-item{grid-template-columns:1fr}
+      .show-window{left:20px; right:20px; top:20px}
+      .show-chip{left:20px; bottom:22px; width:140px; height:140px}
+      .show-orbit{right:18px; bottom:18px; width:180px; height:180px}
+      .footer-wrap{flex-direction:column; align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <div class="orb three"></div>
+
+  <header>
+    <div class="container nav">
+      <a class="logo" href="#">
+        <div class="logo-mark">T</div>
+        <div>Titanovate <span>Tech</span></div>
+      </a>
+      <nav>
+        <a href="#about">About</a>
+        <a href="#vantage">Vantage</a>
+        <a href="#capabilities">Capabilities</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="reveal">
+          <div class="eyebrow"><span class="dot"></span> Building next-generation trading infrastructure</div>
+          <h1><span class="gradient">Software for modern market execution.</span></h1>
+          <p>
+            Titanovate Tech is a fintech software company building trading systems, algorithmic infrastructure,
+            and risk-aware tooling for the next generation of market participants.
+            Our upcoming platform, <strong>Vantage</strong>, is being designed as a web-based trading system for
+            Titanovate Capital’s proprietary workflows and, over time, for broader use by other trading firms and retail investors.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#vantage">Explore Vantage</a>
+            <a class="btn btn-secondary" href="#about">About Titanovate Tech</a>
+          </div>
+          <div class="micro-note">
+            Early stage product in development • Focused on execution, automation, research workflows, and risk control
+          </div>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="visual-stack">
+            <div class="card small-top">
+              <div class="card-head">
+                <span>Signal Stack</span>
+                <span>Live</span>
+              </div>
+              <div class="mini-grid">
+                <div class="mini-panel">
+                  <div style="color:#98b0d8;font-size:.82rem;">Latency</div>
+                  <div class="mini-num">Low</div>
+                </div>
+                <div class="mini-panel">
+                  <div style="color:#98b0d8;font-size:.82rem;">Risk</div>
+                  <div class="mini-num">Aware</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card main">
+              <div class="card-head">
+                <span>Vantage / Trading System</span>
+                <span style="color:#9fc0ff;">In development</span>
+              </div>
+              <div class="card-body">
+                <div class="bars">
+                  <div class="bar" style="--w:82%"></div>
+                  <div class="bar" style="--w:64%"></div>
+                  <div class="bar" style="--w:91%"></div>
+                </div>
+                <div class="chart">
+                  <div class="line">
+                    <svg viewBox="0 0 800 300" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id="strokeA" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stop-color="#79f0ff"/>
+                          <stop offset="100%" stop-color="#6aa6ff"/>
+                        </linearGradient>
+                        <linearGradient id="fillA" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stop-color="rgba(121,240,255,0.35)"/>
+                          <stop offset="100%" stop-color="rgba(121,240,255,0)"/>
+                        </linearGradient>
+                      </defs>
+                      <path d="M0,250 C60,220 90,210 135,180 C180,148 218,156 265,136 C320,112 350,122 390,102 C440,78 475,82 540,70 C610,56 650,74 720,34 C745,22 770,26 800,18 L800,300 L0,300 Z"
+                            fill="rgba(121,240,255,0.12)"></path>
+                      <path d="M0,250 C60,220 90,210 135,180 C180,148 218,156 265,136 C320,112 350,122 390,102 C440,78 475,82 540,70 C610,56 650,74 720,34 C745,22 770,26 800,18"
+                            fill="none" stroke="url(#strokeA)" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="tag-row">
+                  <div class="tag">Execution workflows</div>
+                  <div class="tag">Risk controls</div>
+                  <div class="tag">Strategy tooling</div>
+                  <div class="tag">Web-based experience</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card small-bottom">
+              <div class="card-head">
+                <span>System Layers</span>
+              </div>
+              <div class="card-body" style="display:grid; gap:10px;">
+                <div class="tag">Research</div>
+                <div class="tag">Automation</div>
+                <div class="tag">Execution</div>
+                <div class="tag">Monitoring</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <div class="reveal">
+          <h2 class="section-title">Technology-first. Risk-aware. Built to scale.</h2>
+          <p class="section-copy">
+            Titanovate Tech sits at the software and infrastructure layer of the broader Titanovate ecosystem.
+            It develops the systems, software, and trading IP that can power Titanovate Capital’s proprietary trading activity
+            while also forming the foundation for future products and services offered to external users.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="panel reveal">
+            <div class="icon">⚙️</div>
+            <h3>Trading Infrastructure</h3>
+            <p>
+              Building the core stack for algorithmic workflows, market execution, monitoring, and scalable operational control.
+            </p>
+          </div>
+          <div class="panel reveal">
+            <div class="icon">🧠</div>
+            <h3>Systematic Intelligence</h3>
+            <p>
+              Developing tools that support model-driven decision making, disciplined execution, and process consistency across dynamic markets.
+            </p>
+          </div>
+          <div class="panel reveal">
+            <div class="icon">🛡️</div>
+            <h3>Risk by Design</h3>
+            <p>
+              Embedding capital protection, exposure awareness, and operational safeguards into the software layer from the start.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="vantage">
+      <div class="container split">
+        <div class="reveal">
+          <div class="pill">Upcoming product</div>
+          <h2 class="section-title" style="margin-top:16px;">Vantage</h2>
+          <p class="section-copy">
+            Vantage is Titanovate Tech’s upcoming web-based trading system currently under development.
+            It is being designed to support research-to-execution workflows, algorithmic deployment,
+            live monitoring, and a cleaner software experience for modern trading operations.
+          </p>
+          <div class="timeline">
+            <div class="timeline-item">
+              <span>01</span>
+              <div>
+                <strong>Built for internal and future external use</strong>
+                <p>Designed first to support Titanovate Capital’s prop trading workflows, with a software foundation that can later extend to additional firms and retail users.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <span>02</span>
+              <div>
+                <strong>Focused on clarity and control</strong>
+                <p>Emphasis on execution, visibility, automation, and risk-aware system behavior rather than feature bloat.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <span>03</span>
+              <div>
+                <strong>More to come</strong>
+                <p>The product is still in development, and public information will remain intentionally limited as the platform evolves.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="showcase reveal">
+          <div class="show-window">
+            <div class="window-top">
+              <strong>Vantage / Web application</strong>
+              <span style="color:#9db7db">Preview concept</span>
+            </div>
+            <div class="window-lines">
+              <div style="--w:78%"></div>
+              <div style="--w:92%"></div>
+              <div style="--w:64%"></div>
+            </div>
+          </div>
+          <div class="show-chip">
+            <div class="chip-core">VTG</div>
+          </div>
+          <div class="show-orbit">
+            <div class="ring"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="capabilities">
+      <div class="container">
+        <div class="reveal">
+          <h2 class="section-title">A compact overview of what we’re building toward</h2>
+          <p class="section-copy">
+            Without disclosing too much publicly, Titanovate Tech is being developed around a few core software principles.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="panel reveal">
+            <div class="icon">📈</div>
+            <h3>Algorithmic workflows</h3>
+            <p>Software foundations for structured strategy execution, data-driven processes, and repeatable trading operations.</p>
+          </div>
+          <div class="panel reveal">
+            <div class="icon">🌐</div>
+            <h3>Web-native product design</h3>
+            <p>A modern browser-based application experience intended to make complex trading workflows cleaner and more accessible.</p>
+          </div>
+          <div class="panel reveal">
+            <div class="icon">🔒</div>
+            <h3>Controlled growth</h3>
+            <p>Internal use today, with a platform architecture that can eventually support broader software licensing and service models.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>
+        <div style="font-weight:700; color:#eef4ff; margin-bottom:6px;">Titanovate Tech</div>
+        <div>titanovate.net</div>
+      </div>
+      <div>© 2025 Titanovate Tech. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+    const orbs = document.querySelectorAll('.orb');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (orbs[0]) orbs[0].style.transform = `translate3d(${y * 0.02}px, ${y * 0.08}px, 0)`;
+      if (orbs[1]) orbs[1].style.transform = `translate3d(${y * -0.03}px, ${y * 0.12}px, 0)`;
+      if (orbs[2]) orbs[2].style.transform = `translate3d(${y * 0.015}px, ${y * -0.05}px, 0)`;
+    });
+  </script>
+</body>
+</html>
